@@ -1,0 +1,81 @@
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <%= stylesheet_link_tag 'bootstrap', "map" %>  
+  <title>Home</title>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css' rel='stylesheet' /> 
+   
+</head>
+<body>
+  <div class="container-fluid py-4">
+	<p style="color: green"><%= notice %></p>
+    <div class="row mx-3 px-4">
+    <% if (current_user.A_Verificar?) %>
+      <p style="color: black"><strong>Su usuario no se encuentra validado por lo que no tendrá disponibles todas las funcionalidades de la aplicación</strong></p>
+    <% end %>
+      <%
+        vectorAutos = Car.where(alquilado: true) + Car.where(de_baja: true) 
+        if ((current_user.rango == 'Usuario') || (current_user.rango == 'No_aceptado') || (current_user.rango == 'A_verificar')) then 
+          if ((Car.all.length() == vectorAutos.length())) then %>
+            <h1> No hay autos disponibles para alquilar. </h1>
+          <% else %>
+            <h1> Autos disponibles:</h1>
+          <% end %>
+        <% else %>
+          <h1> Autos disponibles: </h1>
+        <% end %>
+    </div>
+    <div class="row mx-3">
+          <div class="card-body mb-4">
+            <div id="map-container">
+              <div id="map">
+              </div>
+            </div>
+          </div>
+      </div>
+   </div>
+</div>
+
+    
+  <!-- Map box-->
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js'></script>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2xlZXB5LWRvZ28iLCJhIjoiY2xhMnJsbXg0MGI4YTN3b3cyMjlvdXQyciJ9.p_N4Twz82flqkmbOZkDZhA';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v9',
+      center: [-57.947999, -34.926405],
+      zoom: 12
+     });
+
+    
+    <% if (current_user.rango == 'Usuario') %>
+      <% Car.all.each do |car| %>
+        <% if !(car.alquilado || car.de_baja) %>
+
+          var popup = new mapboxgl.Popup({ closeOnClick: true }, {offset: 50})
+          .setHTML('<h5><%= car.modelo %></h5> <b><%= car.patente %></b> | Capacidad del tanque: <%= car.tanque %>');
+          
+          var marker = new mapboxgl.Marker()
+            .setLngLat(['<%= car.lng %>', '<%= car.lat %>'])
+            .setPopup(popup)
+            .addTo(map);
+      <% end %>
+    <% end %>
+    <% elsif %>
+      <% if ((current_user.rango == "Admin") || (current_user.rango == "Supervisor")) %>
+        <% Car.all.each do |car| %>
+          var popup = new mapboxgl.Popup({ closeOnClick: true }, {offset: 50})
+          .setHTML('<h5><%= car.modelo %></h5> <b><%= car.patente %></b> | Capacidad del tanque: <%= car.tanque %> | Estado: <% if (car.de_baja?) %> De baja <%end%> <% if (!car.de_baja?) %> Activo <% end %>');
+          
+          var marker = new mapboxgl.Marker()
+            .setLngLat(['<%= car.lng %>', '<%= car.lat %>'])
+            .setPopup(popup)
+            .addTo(map);
+        <% end %>
+      <% end %>
+    <% end %>
+        
+          
+     
+</script>
+</body>

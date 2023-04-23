@@ -1,0 +1,53 @@
+<head>
+<%= stylesheet_link_tag 'bootstrap', 'rent-index-style' %>
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+</head>
+<%= ensure_log %>
+
+<div class="container">
+    <h1 class='my-3 py-3'>Mis alquileres</h1>
+    <p style="color: green"><%= notice %></p>
+    <div class="row">
+    <% if !(@rents.empty?) then %>
+    <% @rents.each do |rent| %>        
+        <div class="col-lg-4">
+        <div class="card card-margin">
+            <div class="card-header no-border">
+                <h5 class="card-title"><%= Car.find(rent.car_id).patente %> - <%= Car.find(rent.car_id).modelo %></h5>
+            </div>
+              <div class="card-body pt-0">
+                  <div class="widget-49">
+                      <div class="widget-49-title-wrapper">
+                          <div class="widget-49-date-primary">
+                              <span class="widget-49-date-day"><%= rent.created_at.day %>/<%= rent.created_at.month %></span>
+                          </div>
+                          <div class="widget-49-meeting-info">
+                                <span class="widget-49-pro-title">Precio del alquiler: <b>$<%= number_with_precision rent.precio, :precision => 2 %></span></b>
+                                <span class="widget-49-meeting-time">Hora de comienzo del alquiler: <%= rent.created_at.hour %>:<%= rent.created_at.min %> hs </span>
+                          </div>
+                      </div>
+                      <ol class="widget-49-meeting-info">
+                          <li class="widget-49-meeting-item"><span>Combustible gastado: <%= rent.combustible_gastado %></span></li>
+                          <li class="widget-49-meeting-item"><span>Hora de finalizacion de alquiler: <%= Time.new.change(hour: rent.tiempo.hour, min: rent.tiempo.min).strftime("%H:%M")%> hs</span></li> </ol>
+                      <div class="widget-49-meeting-action">
+                           <%if rent.activo? %>
+                                <span class="widget-49-pro-title" style="font-weight: bold; color: green" >Tiempo restante: <%=time_diff(rent.tiempo, Time.now)  %>
+                            <%elsif%>
+                                <span class="widget-49-pro-title" style="color:red">Alquiler finalizado</span>
+                            <% end %>
+                          <%= link_to "Detalles", rent, :class => "btn btn-sm btn-flash-border-primary" %>
+                      </div>
+                  </div>
+            </div>
+        </div>
+</div>
+<% end %>
+<%else %>
+    <div class='container py-4' align='center'>
+	    <span class="display-1 d-block">:(</span>
+        <div class="mb-4 lead">Lo sentimos, no se han encontrado alquileres.</div>
+        <a href="/cars" class="btn btn-link">Realizar un alquiler...</a>
+    </div>
+<%end%>
+</div>
+</div>

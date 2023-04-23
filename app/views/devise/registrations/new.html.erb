@@ -1,0 +1,91 @@
+
+<head>
+  <%= stylesheet_link_tag 'bootstrap', 'sign-up' %>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+</head>
+
+<%= render 'shared/nav' %>
+
+<section class="h-100 bg-light">
+  <div class="container py-5 h-100">
+    <div class="row d-flex py-5 justify-content-center align-items-center h-100">
+      <div class="col">
+        <div class="card card-registration my-4">
+          <div class="row g-0">
+            <div class="col-xl-6 d-none d-xl-block">
+              <img src="https://i.pinimg.com/564x/13/e9/e7/13e9e7710de407b310c8aa6f856094a2.jpg"
+                alt="Sample photo" class="img-fluid"
+                style="border-top-left-radius: .50rem; border-bottom-left-radius: .50rem;" />
+            </div>
+            <div class="col-xl-6">
+              <div class="card-body p-md-5 text-black">
+                 <div class="d-flex align-items-center mb-3 pb-1">
+                    <i class="fa-regular fa-user fa-3x me-3" style="color: #ab0040;"></i>
+                    <h2 class="fw-normal text-bold" style="letter-spacing: 1px;">Registro</h2>
+
+                  </div>
+                  
+                  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+                    <%= render "devise/shared/error_messages", resource: resource %>
+                    
+                    <div class="field form-group">
+                      <%= f.label :email, 'E-Mail' %><br />
+                      <%= f.email_field :email, autofocus: true, class:"form-control" %>
+                    </div>
+
+                    <div class="field form-group">
+                      <%= f.label :password, 'Contraseña' %>
+                      <% if @minimum_password_length %>
+                      <em>(<%= @minimum_password_length %> carácteres minimos)</em>
+                      <% end %><br />
+                      <%= f.password_field :password, autocomplete: "new-password", class:"form-control" %>
+                    </div>
+
+                    <div class="field form-group">
+                      <%= f.label :password_confirmation, 'Repita la contraseña' %><br />
+                      <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control" %>
+                    </div>
+
+                    <div class="field form-group">
+                      <%= f.label :name, 'Nombre' %><br />
+                      <%= f.text_area :name, size: "26x1", class:"form-control" %>
+                    </div>
+
+                    <div class="field form-group">
+                      <%= f.label :dni, 'DNI/Numero de pasaporte' %><br />
+                      <%= f.text_area :dni, size: "26x1", class:"form-control" %>
+                    </div>
+
+                    <div class="field form-group">
+                      <%= f.label :genero, 'Genero' %><br />
+                      <%= f.select :genero, options_for_select([['Masculino','Masculino'],['Femenino','Femenino']], :selected => params[:genero]), {}, { :class => 'span3 controls controls-row' } %>
+                    </div>
+
+                    <div class="field form-group">
+                      <%= f.label :telephone, 'Telefono' %><br />
+                      <%= f.telephone_field :telephone, class:"form-control" %>
+                    </div>
+
+                    <div class="field form-group">
+                      <%= f.label :birthdate, 'Fecha de nacimiento', style: "display: block" %>
+                      <%= f.date_field :birthdate %>
+                      <br />
+                    </div>	
+                    <br />
+
+                   	<div class="field form-group">
+                      <%= f.label :file, 'Documentos: Unico archivo con fotos de Licencia de conducir y DNI / Pasaporte' %><br />
+                      <%= f.file_field :file %>
+                    </div>
+                    
+                    
+                    
+                    <div class="actions">
+                      <%= f.submit "Registrarse" %> 
+                    </div>
+
+
+                  <% end %>
+                  <br />
+</div>
+</section>

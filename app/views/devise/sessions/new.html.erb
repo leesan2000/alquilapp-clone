@@ -1,0 +1,70 @@
+<head>
+	<%= stylesheet_link_tag 'bootstrap', 'login-styles'%>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+</head>
+
+<%= render 'shared/nav'%>
+<%= render "devise/shared/error_messages", resource: resource %>    
+
+
+<section class="vh-100" style="background-color: #F4F7FD;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div class="card" style="border-radius: 1rem;">
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img src="https://media.discordapp.net/attachments/1029137847418114209/1041835460340748358/WhatsApp_Image_2022-11-14_at_19.01.23.jpeg?width=724&height=671"
+                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+            </div>
+            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
+
+                <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+
+                  <div class="d-flex align-items-center mb-3 pb-1">
+                    <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                    <h5 class="fw-normal text-bold" style="letter-spacing: 1px;">Inicie sesión en su cuenta</h5>
+
+                  </div>
+
+                  <%= content_tag(:div, flash[:error], :id => "flash_error", :style => "color: red") if flash[:error]%>
+                  <%= content_tag(:div, flash[:notice], :id => "flash_notice", :style => "color: green") if flash[:notice] %>
+                  <%= content_tag(:div, flash[:alert], :id => "flash_alert", :style => "color: red") if flash[:alert] %>
+
+                 
+
+                  <div class="form-outline mb-4">
+                    <%= f.label :email, 'E-Mail' %><br />
+                    <%= f.email_field :email, autofocus: true, autocomplete: "email", :class => "form-control form-control-lg" %>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <%= f.label :password, 'Contraseña'  %><br />
+                    <%= f.password_field :password, autocomplete: "current-password", :class => "form-control form-control-lg" %>
+                  </div>
+
+                  <% if devise_mapping.rememberable? %>
+                  <div class="field">
+                    <%= f.check_box :remember_me %>
+                    <%= f.label :remember_me, 'Recuerdame' %>
+                  </div>
+                <% end %>
+
+                  <div class="pt-1 mb-4">
+                    <%= f.submit "Iniciar sesión", class:"btn btn-dark btn-lg btn-block", type:"submit", label:'Iniciar sesion' %>
+                  </div>
+
+                  <a class="small text-muted" href="/users/password/new">¿Olvido su contraseña?</a>
+                  <p class="mb-5 pb-lg-2" style="color: #393f81;">¿No tiene cuenta?<a href="/users/sign_up" style="color: #393f81;"> Registrese aqui</a></p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

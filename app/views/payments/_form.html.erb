@@ -1,0 +1,91 @@
+<head>
+    <%= stylesheet_link_tag 'saldo-editer-styles' %>    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <title>Checkout</title>
+</head>
+
+<% ensure_log %>
+<section class="h-100" style="background-color: #eee;">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center py-5">
+      <div class="col-lg-8 col-xl-6">
+        <div class="card border-top border-bottom border-3 pb-1" style="border-color: #f37a27 !important;">
+          <div class="card-body p-5">
+            <p class="lead fw-bold mb-5" style="color: #f37a27;">Cargar saldo</p>
+            <%= form_with(model: @payment) do |form| %>
+                    <% if @payment.errors.any? %>
+                      <div style="color: red">
+                        <p>
+                        <%= pluralize(@payment.errors.count, "error") %> prohibited this payment from being saved:</p>
+                        <ul>
+                          <% @payment.errors.each do |error| %>
+                            <li><%= error.full_message %></li>
+                          <% end %>
+                        </ul>
+                      </div>
+                    <% end %>
+
+            <div class="row">
+              <div class="col mb-3">
+                <p class="small text-muted mb-1">Fecha</p>
+                <p><%= Time.now.strftime("%d-%m-%Y") %></p>
+              </div>
+              <div class="col mb-3">
+                <p class="small text-muted mb-1">Numero de pedido</p>
+                <p>12</p>
+              </div>
+            </div>
+            <div class="mx-n5 px-5 py-4" style="background-color: #f2f2f2;">
+              <div class="row">
+                <div class="col-md-8 col-lg-9">
+                  <p>Ingrese la cantidad de saldo a cargar:</p>
+                </div>
+                <div class="input-group mb-3">
+                  <div class='row'>
+                    <div class="input-group-prepend py-2">
+                      <span class="input-group-text">$</span>
+                      <%= form.number_field :precio, class:"form-control form-control-lg", type:"text" , placeholder:"1000.00"%> 
+                      <%= form.hidden_field :aceptado, value: true %>
+                      <%= form.hidden_field :request, value: '' %>
+                      <%= form.hidden_field :response, value: '' %>
+                      <%= form.hidden_field :user_id, value: current_user.id %>
+                      <%= form.hidden_field :aceptado, value: false %>
+                    </div>
+                  </div>
+                </div>
+                  <div class='row'>
+                    <div class='py-2 justify-content-center align-items-center'>
+                      <div class="cho-container"></div>
+                      <% form.submit%>
+                    </div>
+                  </div>
+                  <% end %>
+                  <script>
+                     // public key
+                    const mp = new MercadoPago('APP_USR-2f791e89-1594-42e1-aa71-848704777626', {
+                      locale: 'es-AR'
+                    });
+    
+                    mp.checkout({
+                      preference: {
+                        id: 2
+                      },
+                      render: {
+                        container: '.cho-container',
+                        label: 'Crear pago',
+                      }
+                    });
+                  </script>
+                  </div>
+              </div>
+            <p class="mt-4 pt-2 mb-0">Necesitas ayuda? <a href="#!" style="color: #f37a27;" onclick="alert('Estamos trabajando en esta funcionalidad!')">Por favor, contactenos</a></p>  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
